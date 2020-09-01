@@ -40,6 +40,17 @@ class Users {
       next(err);
     }
   };
+
+  static updateUser = async (req, res, next) => {
+    try {
+      const { userId } = req.params;
+      const newUser = req.body;
+      const result = await User.findByIdAndUpdate(userId, newUser);
+      res.status(200).json({ success: true });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 module.exports = Users;
