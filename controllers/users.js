@@ -1,4 +1,10 @@
 const User = require("../models/user");
+const Car = require("../models/car");
+const Joi = require("joi");
+
+const idSchema = Joi.object().keys({
+  userId: Joi.string().regex(),
+});
 
 class Users {
   static index = async (req, res, next) => {
@@ -50,6 +56,27 @@ class Users {
     } catch (err) {
       next(err);
     }
+  };
+
+  static getUserCars = async (req, res, next) => {
+    try {
+      const { userId } = req.params;
+      const user = await User.findById(userId).populate("cars");
+      res.status(200).json(user.cars);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  static newUserCar = async (req, res, next) => {
+    const { userId } = req.params;
+    const newCar = new Car(req.body);
+    const user = await User.findById(userId);
+    newCar.seller = user;
+    await newCar.save();
+    user.cars.push(newCar);
+    await user.save();
+    res.status(201).json(newCar);
   };
 }
 
