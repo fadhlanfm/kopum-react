@@ -1,12 +1,12 @@
 const User = require("../models/user");
 const Car = require("../models/car");
-const Joi = require("joi");
+// const Joi = require("joi");
 
-const idSchema = Joi.object().keys({
-  userId: Joi.string()
-    .regex(/^[0-9a-fA-F]{24}$/)
-    .required(),
-});
+// const idSchema = Joi.object().keys({
+//   userId: Joi.string()
+//     .regex(/^[0-9a-fA-F]{24}$/)
+//     .required(),
+// });
 
 class Users {
   static index = async (req, res, next) => {
@@ -30,7 +30,7 @@ class Users {
 
   static getUser = async (req, res, next) => {
     try {
-      const result = Joi.Validate(req.params, idSchema);
+      // const result = Joi.Validate(req.params, idSchema);
       const { userId } = req.params;
       const user = await User.findById(userId);
       res.status(200).json(user);
