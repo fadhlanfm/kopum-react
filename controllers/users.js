@@ -1,12 +1,5 @@
 const User = require("../models/user");
 const Car = require("../models/car");
-// const Joi = require("joi");
-
-// const idSchema = Joi.object().keys({
-//   userId: Joi.string()
-//     .regex(/^[0-9a-fA-F]{24}$/)
-//     .required(),
-// });
 
 class Users {
   static index = async (req, res, next) => {
@@ -20,7 +13,7 @@ class Users {
 
   static newUser = async (req, res, next) => {
     try {
-      const newUser = new User(req.body);
+      const newUser = new User(req.value.body);
       const user = await newUser.save();
       res.status(201).json(user);
     } catch (err) {
@@ -30,8 +23,7 @@ class Users {
 
   static getUser = async (req, res, next) => {
     try {
-      // const result = Joi.Validate(req.params, idSchema);
-      const { userId } = req.params;
+      const { userId } = req.value.params;
       const user = await User.findById(userId);
       res.status(200).json(user);
     } catch (err) {
@@ -41,8 +33,8 @@ class Users {
 
   static replaceUser = async (req, res, next) => {
     try {
-      const { userId } = req.params;
-      const newUser = req.body;
+      const { userId } = req.value.params;
+      const newUser = req.value.body;
       const result = await User.findByIdAndUpdate(userId, newUser);
       res.status(200).json({ success: true });
     } catch (err) {
@@ -52,8 +44,8 @@ class Users {
 
   static updateUser = async (req, res, next) => {
     try {
-      const { userId } = req.params;
-      const newUser = req.body;
+      const { userId } = req.value.params;
+      const newUser = req.value.body;
       const result = await User.findByIdAndUpdate(userId, newUser);
       res.status(200).json({ success: true });
     } catch (err) {
@@ -63,7 +55,7 @@ class Users {
 
   static getUserCars = async (req, res, next) => {
     try {
-      const { userId } = req.params;
+      const { userId } = req.value.params;
       const user = await User.findById(userId).populate("cars");
       res.status(200).json(user.cars);
     } catch (err) {
@@ -72,8 +64,8 @@ class Users {
   };
 
   static newUserCar = async (req, res, next) => {
-    const { userId } = req.params;
-    const newCar = new Car(req.body);
+    const { userId } = req.value.params;
+    const newCar = new Car(req.value.body);
     const user = await User.findById(userId);
     newCar.seller = user;
     await newCar.save();
