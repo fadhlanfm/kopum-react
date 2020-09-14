@@ -3,6 +3,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const router = require("./routes");
+const helmet = require("helmet");
 // const { errorHandler } = require("./middlewares");
 
 mongoose.Promise = global.Promise;
@@ -13,6 +14,7 @@ mongoose.connect("mongodb://localhost/kopum", {
 
 const app = express();
 
+app.use(helmet());
 app.use(cors());
 app.use(logger("dev"));
 app.use(express.urlencoded({ extended: false }));

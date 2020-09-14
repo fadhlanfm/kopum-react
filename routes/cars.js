@@ -6,6 +6,28 @@ const {
   schemas,
 } = require("../helpers/routeHelpers");
 
-router.route("/").get(CarsController.index).post(CarsController.newCar);
+router
+  .route("/")
+  .get(CarsController.index)
+  .post(validateBody(schemas.carSchema), CarsController.newCar);
+
+router
+  .route("/:carId")
+  .get(validateParam(schemas.idSchema, "carId"), CarsController.getCar)
+  .put(
+    [
+      validateParam(schemas.idSchema, "carId"),
+      validateBody(schemas.putCarSchema),
+    ],
+    CarsController.replaceCar
+  )
+  .patch(
+    [
+      validateParam(schemas.idSchema, "carId"),
+      validateBody(schemas.patchCarShema),
+    ],
+    CarsController.updateCar
+  )
+  .delete(validateParam(schemas.idSchemam, "carId"), CarsController.deleteCar);
 
 module.exports = router;
